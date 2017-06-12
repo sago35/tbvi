@@ -6,11 +6,10 @@ import (
 )
 
 type Editor struct {
-	text    []rune
-	cursorx int
-	cursory int
-	width   int
-	height  int
+	text   []rune
+	cursor int
+	width  int
+	height int
 }
 
 func NewEditor() *Editor {
@@ -25,10 +24,9 @@ func (e *Editor) SetSize(w, h int) {
 func (e *Editor) AddRune(r rune) {
 	e.text = append(e.text, r)
 	if r == rune('\n') {
-		e.cursorx = 0
-		e.cursory++
+		e.cursor++
 	} else {
-		e.cursorx += runewidth.RuneWidth(r)
+		e.cursor += runewidth.RuneWidth(r)
 	}
 }
 
@@ -52,5 +50,19 @@ func (e *Editor) Draw() {
 }
 
 func (e *Editor) UpdateCursor() {
-	termbox.SetCursor(e.cursorx, e.cursory)
+	termbox.SetCursor(e.calcCursorXY())
+}
+
+func (e *Editor) calcCursorXY() (int, int) {
+	x := 0
+	y := 0
+	for _, r := range e.text {
+		if r == rune('\n') {
+			x = 0
+			y++
+		} else {
+			x += runewidth.RuneWidth(r)
+		}
+	}
+	return x, y
 }
