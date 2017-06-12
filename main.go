@@ -27,7 +27,15 @@ mainloop:
 			case termbox.KeyEsc:
 				break mainloop
 			case termbox.KeyArrowLeft, termbox.KeyCtrlB:
+				e.MoveCursor(-1, 0)
+				e.Draw()
+				e.UpdateCursor()
+				termbox.Flush()
 			case termbox.KeyArrowRight, termbox.KeyCtrlF:
+				e.MoveCursor(1, 0)
+				e.Draw()
+				e.UpdateCursor()
+				termbox.Flush()
 			case termbox.KeyBackspace, termbox.KeyBackspace2:
 			case termbox.KeyDelete, termbox.KeyCtrlD:
 			case termbox.KeyTab:
