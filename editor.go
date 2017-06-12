@@ -53,10 +53,8 @@ func (e *Editor) Draw() {
 			x = x + runewidth.RuneWidth(e.text[i])
 		}
 	}
-}
-
-func (e *Editor) UpdateCursor() {
 	termbox.SetCursor(e.calcCursorXY())
+	termbox.Flush()
 }
 
 func (e *Editor) MoveCursor(x, y int) {

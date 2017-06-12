@@ -29,13 +29,9 @@ mainloop:
 			case termbox.KeyArrowLeft, termbox.KeyCtrlB:
 				e.MoveCursor(-1, 0)
 				e.Draw()
-				e.UpdateCursor()
-				termbox.Flush()
 			case termbox.KeyArrowRight, termbox.KeyCtrlF:
 				e.MoveCursor(1, 0)
 				e.Draw()
-				e.UpdateCursor()
-				termbox.Flush()
 			case termbox.KeyBackspace, termbox.KeyBackspace2:
 			case termbox.KeyDelete, termbox.KeyCtrlD:
 			case termbox.KeyTab:
@@ -46,14 +42,10 @@ mainloop:
 			case termbox.KeyEnter:
 				e.AddRune(rune('\n'))
 				e.Draw()
-				e.UpdateCursor()
-				termbox.Flush()
 			default:
 				if ev.Ch != 0 {
 					e.AddRune(ev.Ch)
 					e.Draw()
-					e.UpdateCursor()
-					termbox.Flush()
 				}
 			}
 		case termbox.EventResize:
