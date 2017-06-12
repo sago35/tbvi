@@ -22,10 +22,6 @@ func (e *Editor) SetSize(w, h int) {
 	e.height = h
 }
 
-func (e *Editor) SetRune(r rune) {
-	e.text = []rune{r}
-}
-
 func (e *Editor) AddRune(r rune) {
 	e.text = append(e.text, r)
 	if r == rune('\n') {
