@@ -15,17 +15,18 @@ func main() {
 
 	e := NewEditor()
 	e.SetSize(termbox.Size())
+	e.Draw()
 
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-	termbox.Flush()
+	mainLoop(e)
+}
 
-mainloop:
+func mainLoop(e *Editor) {
 	for {
 		switch ev := termbox.PollEvent(); ev.Type {
 		case termbox.EventKey:
 			switch ev.Key {
 			case termbox.KeyEsc:
-				break mainloop
+				return
 			case termbox.KeyArrowLeft, termbox.KeyCtrlB:
 				e.MoveCursor(-1, 0)
 				e.Draw()
