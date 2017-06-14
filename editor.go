@@ -30,7 +30,9 @@ func (e *Editor) SetSize(w, h int) {
 
 func (e *Editor) AddRune(r rune) {
 	cursor := e.calcCursor()
-	if cursor < len(e.text) {
+	if cursor == 0 {
+		e.text = append([]rune{r}, e.text...)
+	} else if cursor < len(e.text) {
 		e.text = append(e.text[:cursor], e.text[cursor-1:]...)
 		e.text[cursor] = r
 	} else {
