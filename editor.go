@@ -75,13 +75,15 @@ func (e *Editor) debugDraw() {
 }
 
 func (e *Editor) MoveCursor(x, y int) {
+	c := e.calcCursor()
+
 	if x > 0 {
-		if e.x+x <= len(e.text)+1 {
-			e.x += x
+		if c+x <= len(e.text) {
+			e.x += runewidth.RuneWidth(e.text[c])
 		}
 	} else {
-		if 1 <= e.x+x {
-			e.x += x
+		if 0 <= c+x {
+			e.x -= runewidth.RuneWidth(e.text[c-1])
 		}
 	}
 }
