@@ -90,20 +90,29 @@ func (e *Editor) MoveCursor(x, y int) {
 	}
 }
 
+// CalcCursor calc index of []rune from e.x and e.y.
 func (e *Editor) calcCursor() int {
-	// e.x と e.y から、[]runeとしての位置を割り出す
 	ri := 0
+	y := 1
 	x := 0
 
-	//if e.x != 0 {
-	for _, r := range e.text {
+	for y < e.y {
+		for _, r := range e.text {
+			ri++
+			if r == '\n' {
+				y++
+				break
+			}
+		}
+	}
+
+	for _, r := range e.text[ri:] {
 		if x >= e.x-runewidth.RuneWidth(r) {
 			break
 		}
 		x += runewidth.RuneWidth(r)
 		ri++
 	}
-	//}
 
 	return ri
 }
