@@ -39,7 +39,7 @@ func (e *Editor) AddRune(r rune) {
 		e.text = append(e.text[:cursor], r)
 	}
 	if r == rune('\n') {
-		e.x = 0
+		e.x = 1
 		e.y += 1
 	} else {
 		e.x += runewidth.RuneWidth(r)
