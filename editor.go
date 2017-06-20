@@ -70,7 +70,8 @@ func (e *Editor) Draw() {
 }
 
 func (e *Editor) debugDraw() {
-	str := fmt.Sprintf("x=%d, y=%d, cursor=%d, len(text)=%d", e.x, e.y, e.calcCursor(), len(e.text))
+	x, y := e.calcCursorXY(e.calcCursor())
+	str := fmt.Sprintf("x=%d, y=%d, cursor=%d, len(text)=%d, x,y=%d,%d", e.x, e.y, e.calcCursor(), len(e.text), x, y)
 	for i, r := range []rune(str) {
 		termbox.SetCell(i, e.height-1, r, termbox.ColorDefault, termbox.ColorDefault)
 	}
@@ -81,11 +82,15 @@ func (e *Editor) MoveCursor(x, y int) {
 
 	if x > 0 {
 		if c+x <= len(e.text) {
-			e.x += runewidth.RuneWidth(e.text[c])
+			e.x, e.y = e.calcCursorXY(c + x)
 		}
 	} else {
 		if 0 <= c+x {
-			e.x -= runewidth.RuneWidth(e.text[c-1])
+			if e.text[c+x] == rune('\n') {
+				e.x, e.y = e.calcCursorXY(c + x - 1)
+			} else {
+				e.x, e.y = e.calcCursorXY(c + x)
+			}
 		}
 	}
 }
@@ -117,15 +122,16 @@ func (e *Editor) calcCursor() int {
 	return ri
 }
 
-func (e *Editor) calcCursorXY() (int, int) {
-	x := 0
-	y := 0
-	for _, r := range e.text[:e.cursor] {
-		if r == rune('\n') {
-			x = 0
+// calcCursorXY calc x and y from index of []rume
+func (e *Editor) calcCursorXY(index int) (int, int) {
+	x := 1
+	y := 1
+	for i := 0; i < index; i++ {
+		if e.text[i] == rune('\n') {
+			x = 1
 			y++
 		} else {
-			x += runewidth.RuneWidth(r)
+			x = x + runewidth.RuneWidth(e.text[i])
 		}
 	}
 	return x, y
